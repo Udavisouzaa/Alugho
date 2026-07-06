@@ -8,10 +8,10 @@ export default function SignupPage({
   searchParams: { message: string }
 }) {
   return (
-    <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2 mx-auto h-screen bg-gray-50">
+    <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2 mx-auto h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
       <Link
         href="/"
-        className="absolute left-8 top-8 py-2 px-4 rounded-md no-underline text-foreground bg-btn-background hover:bg-btn-background-hover flex items-center group text-sm"
+        className="absolute left-8 top-8 py-2 px-4 rounded-md no-underline text-foreground bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center group text-sm font-medium transition-colors"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -39,58 +39,58 @@ export default function SignupPage({
         action={signup}
       >
         <div className="flex flex-col mb-8 text-center">
-          <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
+          <h1 className="text-3xl font-medium text-teal-600 dark:text-teal-400">
             RentPay
           </h1>
-          <p className="text-sm text-gray-500 mt-2">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
             Crie sua conta para começar a gerenciar aluguéis com facilidade.
           </p>
         </div>
 
-        <label className="text-md font-medium text-gray-700" htmlFor="name">
+        <label className="text-sm font-medium text-gray-700 dark:text-gray-300" htmlFor="name">
           Nome Completo
         </label>
         <input
-          className="rounded-md px-4 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-700 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+          className="rounded-md px-4 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-700 mb-4 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-colors shadow-sm sm:text-sm"
           name="name"
           placeholder="Seu nome"
           required
         />
 
-        <label className="text-md font-medium text-gray-700" htmlFor="email">
+        <label className="text-sm font-medium text-gray-700 dark:text-gray-300" htmlFor="email">
           Email
         </label>
         <input
-          className="rounded-md px-4 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-700 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+          className="rounded-md px-4 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-700 mb-4 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-colors shadow-sm sm:text-sm"
           name="email"
           placeholder="voce@exemplo.com"
           required
         />
 
-        <label className="text-md font-medium text-gray-700" htmlFor="password">
+        <label className="text-sm font-medium text-gray-700 dark:text-gray-300" htmlFor="password">
           Senha
         </label>
         <input
-          className="rounded-md px-4 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-700 mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+          className="rounded-md px-4 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-700 mb-6 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-colors shadow-sm sm:text-sm"
           type="password"
           name="password"
           placeholder="••••••••"
           required
         />
 
-        <button className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-md px-4 py-3 text-foreground font-medium hover:from-blue-700 hover:to-indigo-700 transition-all shadow-md hover:shadow-lg">
+        <button className="bg-teal-600 text-white rounded-md px-4 py-2.5 font-medium hover:bg-teal-700 transition-colors shadow-sm text-sm">
           Criar Conta
         </button>
 
         {searchParams?.message && (
-          <p className="mt-4 p-4 bg-red-50 text-red-600 text-center text-sm rounded-md border border-red-200">
+          <p className="mt-4 p-4 bg-orange-50 text-orange-700 text-center text-sm rounded-md border border-orange-200">
             {searchParams.message}
           </p>
         )}
 
-        <div className="mt-8 text-center text-sm text-gray-500">
+        <div className="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
           Já tem uma conta?{' '}
-          <Link href="/login" className="text-blue-600 hover:underline font-medium">
+          <Link href="/login" className="text-teal-600 hover:text-teal-800 dark:text-teal-400 dark:hover:text-teal-300 font-medium transition-colors">
             Faça login
           </Link>
         </div>
