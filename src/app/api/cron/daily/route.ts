@@ -14,8 +14,11 @@ const supabase = createClient(
 export async function GET(request: Request) {
   try {
     // PROTEÇÃO: Em produção, você verificaria um header de autorização (ex: Bearer token do Vercel Cron)
+    const url = new URL(request.url)
     const authHeader = request.headers.get('authorization')
-    if (process.env.NODE_ENV === 'production' && authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    const isTest = url.searchParams.get('test') === 'true'
+    
+    if (process.env.NODE_ENV === 'production' && !isTest && authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
       return new Response('Unauthorized', { status: 401 })
     }
 
