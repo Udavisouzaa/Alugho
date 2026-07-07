@@ -102,14 +102,14 @@ export async function GET(request: Request) {
           })
           emailsEnviados++
         } catch (e) {
-          console.error(\`Erro ao enviar email para \${tenant.email}:\`, e)
+          console.error(`Erro ao enviar email para ${tenant.email}:`, e)
         }
       }
     }
 
     return NextResponse.json({
       success: true,
-      message: \`Cron de lembretes finalizado. \${emailsEnviados} e-mails enviados.\`
+      message: `Cron de lembretes finalizado. ${emailsEnviados} e-mails enviados.`
     })
 
   } catch (error: any) {

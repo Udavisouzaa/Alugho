@@ -128,25 +128,22 @@ export async function GET(request: Request) {
           console.error(`Erro na integração Stripe para imóvel ${property.id}:`, e)
         }
           
-          // c) Enviar E-mail via Resend (Simulação)
-          if (process.env.RESEND_API_KEY && activeTenant.email) {
-            await resend.emails.send({
-              from: 'RentPay <onboarding@resend.dev>', // Domínio de teste do Resend
-              to: activeTenant.email,
-              subject: `Sua fatura de aluguel (${mesReferencia}) está disponível`,
-              html: `
-                <h2>Olá, ${activeTenant.nome}</h2>
-                <p>A fatura do seu aluguel no valor de <strong>R$ ${property.valor_aluguel}</strong> já foi gerada.</p>
-                <p>Vencimento: ${dueDate.toLocaleDateString('pt-BR')}</p>
-                <p><a href="${paymentLink || '#'}">Clique aqui para ver a sua fatura</a></p>
-              `
-            })
-          }
-        } else {
-          console.error('Erro ao inserir fatura no banco:', insertError)
+        // c) Enviar E-mail via Resend (Simulação)
+        if (process.env.RESEND_API_KEY && activeTenant.email) {
+          await resend.emails.send({
+            from: 'RentPay <onboarding@resend.dev>', // Domínio de teste do Resend
+            to: activeTenant.email,
+            subject: `Sua fatura de aluguel (${mesReferencia}) está disponível`,
+            html: `
+              <h2>Olá, ${activeTenant.nome}</h2>
+              <p>A fatura do seu aluguel no valor de <strong>R$ ${property.valor_aluguel}</strong> já foi gerada.</p>
+              <p>Vencimento: ${dueDate.toLocaleDateString('pt-BR')}</p>
+              <p><a href="${paymentLink || '#'}">Clique aqui para ver a sua fatura</a></p>
+            `
+          })
         }
-      }
-    }
+      } // Fim if (!existingInvoice)
+    } // Fim for (const property of properties)
 
     return NextResponse.json({ 
       success: true, 
