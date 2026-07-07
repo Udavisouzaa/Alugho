@@ -13,7 +13,7 @@ export interface GatewayPayment {
 /**
  * Cria uma Sessão de Checkout no Stripe (com suporte a PIX e Boleto)
  */
-export async function createPayment(email: string, valor: number, descricao: string): Promise<GatewayPayment> {
+export async function createPayment(email: string, valor: number, descricao: string, invoiceId: string): Promise<GatewayPayment> {
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card', 'boleto'], // Em ambiente real de BR, o Stripe adiciona PIX nativamente ou por configuração no Dashboard.
     line_items: [
@@ -30,6 +30,14 @@ export async function createPayment(email: string, valor: number, descricao: str
     ],
     mode: 'payment',
     customer_email: email,
+    metadata: {
+      invoice_id: invoiceId,
+    },
+    payment_intent_data: {
+      metadata: {
+        invoice_id: invoiceId,
+      },
+    },
     success_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/dashboard/invoices?success=true`,
     cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/dashboard/invoices?canceled=true`,
   })

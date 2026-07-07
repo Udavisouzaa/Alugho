@@ -80,26 +80,8 @@ export async function GET(request: Request) {
 
         const dueDateString = dueDate.toISOString().split('T')[0]
 
-        // a) Gerar no Stripe
-        let paymentLink = ''
-        let paymentId = ''
-        try {
-          if (process.env.STRIPE_SECRET_KEY) {
-            const payment = await createPayment(
-              activeTenant.email || 'contato@rentpay.com', 
-              property.valor_aluguel, 
-              `Aluguel - ${property.endereco} (${mesReferencia})`
-            )
-            paymentId = payment.id
-            paymentLink = payment.invoiceUrl
-          }
-        } catch (e) {
-          console.error(`Erro na integração Stripe para imóvel ${property.id}:`, e)
-          // Continua para criar no nosso banco mesmo sem gateway
-        }
-
-        // b) Salvar no Supabase
-        const { error: insertError } = await supabase
+        // a) Inserir a Fatura Inicial (para gerar o ID)
+        const { data: newInvoice, error: insertError } = await supabase
           .from('invoices')
           .insert({
             tenant_id: activeTenant.id,
@@ -108,12 +90,43 @@ export async function GET(request: Request) {
             valor: property.valor_aluguel,
             status: 'pendente',
             data_vencimento: dueDateString,
-            gateway_id: paymentId,
-            payment_link: paymentLink
           })
+          .select('id')
+          .single()
 
-        if (!insertError) {
-          faturasGeradas++
+        if (insertError || !newInvoice) {
+          console.error('Erro ao inserir fatura no banco:', insertError)
+          continue
+        }
+
+        faturasGeradas++
+
+        // b) Gerar no Stripe com o ID da Fatura na metadata
+        let paymentLink = ''
+        let paymentId = ''
+        try {
+          if (process.env.STRIPE_SECRET_KEY) {
+            const payment = await createPayment(
+              activeTenant.email || 'contato@rentpay.com', 
+              property.valor_aluguel, 
+              `Aluguel - ${property.endereco} (${mesReferencia})`,
+              newInvoice.id
+            )
+            paymentId = payment.id
+            paymentLink = payment.invoiceUrl
+            
+            // Atualizar o banco com os dados do gateway
+            await supabase
+              .from('invoices')
+              .update({
+                gateway_id: paymentId,
+                payment_link: paymentLink
+              })
+              .eq('id', newInvoice.id)
+          }
+        } catch (e) {
+          console.error(`Erro na integração Stripe para imóvel ${property.id}:`, e)
+        }
           
           // c) Enviar E-mail via Resend (Simulação)
           if (process.env.RESEND_API_KEY && activeTenant.email) {
