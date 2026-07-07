@@ -37,88 +37,107 @@ export default async function DashboardMaintenancePage() {
     }
   }
 
+  const abertos = requests?.filter(r => r.status === 'aberto') || []
+  const andamento = requests?.filter(r => r.status === 'andamento') || []
+  const resolvidos = requests?.filter(r => r.status === 'resolvido') || []
+
+  // Componente interno para renderizar a coluna
+  const KanbanColumn = ({ title, items, emptyText, nextStatusAction }: { title: string, items: any[], emptyText: string, nextStatusAction: (currentStatus: string) => string }) => (
+    <div className="flex flex-col bg-gray-50/50 dark:bg-gray-800/30 rounded-xl border border-gray-200 dark:border-gray-700 p-4 h-full">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="font-medium text-gray-900 dark:text-white">{title}</h3>
+        <span className="bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded-full text-xs font-medium border border-gray-200 dark:border-gray-600">
+          {items.length}
+        </span>
+      </div>
+
+      <div className="flex flex-col gap-3 flex-1">
+        {items.length > 0 ? (
+          items.map(req => (
+            <div key={req.id} className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow group">
+              <div className="flex justify-between items-start mb-2">
+                <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${getStatusColor(req.status)}`}>
+                  {getStatusText(req.status)}
+                </span>
+                <span className="text-[10px] text-gray-400 font-medium">
+                  {new Date(req.created_at).toLocaleDateString('pt-BR')}
+                </span>
+              </div>
+              
+              <p className="text-sm font-medium text-gray-900 dark:text-white mb-0.5">
+                {req.tenants?.nome || 'Desconhecido'}
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mb-3 truncate">
+                {req.properties?.endereco || 'Desconhecido'}
+              </p>
+
+              <p className="text-sm text-gray-700 dark:text-gray-300 line-clamp-3 mb-3 bg-gray-50 dark:bg-gray-900/50 p-2 rounded text-xs">
+                {req.descricao}
+              </p>
+
+              {req.foto_url && (
+                <a href={req.foto_url} target="_blank" rel="noreferrer" className="block mb-3">
+                  <div className="h-24 w-full rounded border border-gray-200 dark:border-gray-600 overflow-hidden relative group-hover:border-teal-500 transition-colors">
+                    <img src={req.foto_url} alt="Foto" className="object-cover w-full h-full" />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                      <span className="text-white text-xs font-medium">Ver Foto</span>
+                    </div>
+                  </div>
+                </a>
+              )}
+
+              <div className="pt-3 border-t border-gray-100 dark:border-gray-700 mt-auto">
+                <form action={async () => {
+                  'use server'
+                  const nextStatus = nextStatusAction(req.status)
+                  const { updateRequestStatus } = await import('./actions')
+                  await updateRequestStatus(req.id, nextStatus)
+                }}>
+                  <button 
+                    type="submit"
+                    className="w-full py-1.5 px-3 rounded text-xs font-medium bg-gray-50 hover:bg-gray-100 text-gray-700 dark:bg-gray-700/50 dark:hover:bg-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600 transition-colors flex justify-center items-center gap-1"
+                  >
+                    {req.status === 'aberto' ? 'Mover p/ Andamento →' : req.status === 'andamento' ? 'Resolver Chamado ✓' : '← Reabrir'}
+                  </button>
+                </form>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="flex-1 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-lg flex items-center justify-center p-6 text-center text-sm text-gray-400 dark:text-gray-500 bg-transparent">
+            {emptyText}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
       <div className="mb-8">
         <h2 className="text-2xl font-medium text-gray-900 dark:text-white">Chamados de Manutenção</h2>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Gerencie as solicitações de reparo dos seus inquilinos.</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Gerencie as solicitações de reparo dos seus inquilinos no formato Kanban.</p>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
-        {requests && requests.length > 0 ? (
-          <ul className="divide-y divide-gray-200 dark:divide-gray-700">
-            {requests.map(req => (
-              <li key={req.id} className="p-6 hover:bg-gray-50 dark:hover:bg-gray-800/80 transition-colors">
-                <div className="flex flex-col md:flex-row gap-6">
-                  {req.foto_url && (
-                    <div className="flex-shrink-0">
-                      <a href={req.foto_url} target="_blank" rel="noreferrer">
-                        <img 
-                          src={req.foto_url} 
-                          alt="Foto do reparo" 
-                          className="h-32 w-32 object-cover rounded-lg border border-gray-200 dark:border-gray-600 hover:opacity-90 transition-opacity"
-                        />
-                      </a>
-                    </div>
-                  )}
-                  
-                  <div className="flex-1">
-                    <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-2 gap-2">
-                      <div>
-                        <p className="text-sm font-medium text-gray-900 dark:text-white">
-                          Inquilino: {req.tenants?.nome || 'Desconhecido'}
-                        </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                          Imóvel: {req.properties?.endereco || 'Desconhecido'}
-                        </p>
-                      </div>
-                      
-                      <div className="flex items-center gap-3">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium uppercase ${getStatusColor(req.status)}`}>
-                          {getStatusText(req.status)}
-                        </span>
-                        
-                        <form action={async () => {
-                          'use server'
-                          const nextStatus = req.status === 'aberto' ? 'andamento' : req.status === 'andamento' ? 'resolvido' : 'aberto'
-                          const { updateRequestStatus } = await import('./actions')
-                          await updateRequestStatus(req.id, nextStatus)
-                        }}>
-                          <button 
-                            type="submit"
-                            className="text-xs font-medium text-teal-600 hover:text-teal-800 dark:text-teal-400 dark:hover:text-teal-300 transition-colors"
-                          >
-                            {req.status === 'aberto' ? 'Mover para Andamento' : req.status === 'andamento' ? 'Marcar como Resolvido' : 'Reabrir Chamado'}
-                          </button>
-                        </form>
-                      </div>
-                    </div>
-                    
-                    <div className="mt-4 bg-gray-50 dark:bg-gray-900/50 p-4 rounded-lg border border-gray-100 dark:border-gray-700">
-                      <p className="text-sm text-gray-800 dark:text-gray-200 whitespace-pre-wrap">
-                        {req.descricao}
-                      </p>
-                    </div>
-                    <p className="text-xs text-gray-400 mt-3">
-                      Aberto em: {new Date(req.created_at).toLocaleString('pt-BR')}
-                    </p>
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <div className="text-center py-24 px-6 bg-white dark:bg-gray-800 border border-dashed border-gray-300 dark:border-gray-700 rounded-xl flex flex-col items-center">
-            <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-full mb-4">
-              <svg className="h-10 w-10 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-            </div>
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Tudo tranquilo por aqui!</h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 max-w-sm">Nenhum inquilino relatou problemas de manutenção até o momento. Quando houver um chamado, ele aparecerá nesta lista.</p>
-          </div>
-        )}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-full min-h-[600px]">
+        <KanbanColumn 
+          title="Abertos" 
+          items={abertos} 
+          emptyText="Nenhum chamado aberto. Tudo tranquilo!" 
+          nextStatusAction={() => 'andamento'} 
+        />
+        <KanbanColumn 
+          title="Em Andamento" 
+          items={andamento} 
+          emptyText="Nenhum reparo em andamento no momento." 
+          nextStatusAction={() => 'resolvido'} 
+        />
+        <KanbanColumn 
+          title="Resolvidos" 
+          items={resolvidos} 
+          emptyText="Sem histórico de chamados resolvidos." 
+          nextStatusAction={() => 'aberto'} 
+        />
       </div>
     </div>
   )
