@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { login } from './actions'
 import { ThemeToggle } from '@/components/ThemeToggle'
+import { QuickLoginLocador } from '@/components/QuickLoginLocador'
 
 export default function LoginPage({
   searchParams,
@@ -78,39 +79,7 @@ export default function LoginPage({
           </p>
         )}
 
-        <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-800">
-          <p className="text-xs text-gray-500 text-center mb-3 font-medium uppercase tracking-wider">Acesso Rápido de Teste</p>
-          <div className="grid grid-cols-2 gap-2">
-            <button 
-              type="button"
-              onClick={(e) => {
-                const form = e.currentTarget.closest('form');
-                if (form) {
-                  (form.elements.namedItem('email') as HTMLInputElement).value = 'admin1@rentpay.com';
-                  (form.elements.namedItem('password') as HTMLInputElement).value = 'Senha454*';
-                  form.requestSubmit();
-                }
-              }}
-              className="bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs py-2 rounded transition-colors"
-            >
-              Locador 1 (Davi)
-            </button>
-            <button 
-              type="button"
-              onClick={(e) => {
-                const form = e.currentTarget.closest('form');
-                if (form) {
-                  (form.elements.namedItem('email') as HTMLInputElement).value = 'admin2@rentpay.com';
-                  (form.elements.namedItem('password') as HTMLInputElement).value = 'admin2';
-                  form.requestSubmit();
-                }
-              }}
-              className="bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs py-2 rounded transition-colors"
-            >
-              Locador 2 (Sócio)
-            </button>
-          </div>
-        </div>
+        <QuickLoginLocador />
 
         <div className="mt-8 text-center flex flex-col gap-3">
           <div className="text-sm text-gray-500 dark:text-gray-400">
