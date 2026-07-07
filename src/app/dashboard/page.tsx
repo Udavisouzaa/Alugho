@@ -169,7 +169,7 @@ export default async function DashboardPage() {
               </svg>
             </div>
             <h3 className="text-lg font-medium text-gray-900 mb-2">Você ainda não tem imóveis cadastrados</h3>
-            <p className="text-sm text-gray-500 mb-8 max-w-md">O RentPay funciona muito melhor quando você adiciona seus imóveis e inquilinos. Comece agora mesmo a automatizar suas cobranças!</p>
+            <p className="text-sm text-gray-500 mb-8 max-w-md">O Alugho funciona muito melhor quando você adiciona seus imóveis e inquilinos. Comece agora mesmo a automatizar suas cobranças!</p>
             <Link
               href="/dashboard/properties/new"
               className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm flex items-center gap-2"

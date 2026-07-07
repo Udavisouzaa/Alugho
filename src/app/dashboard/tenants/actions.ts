@@ -36,7 +36,7 @@ export async function createTenant(formData: FormData) {
   }
 
   // 1. Gerar senha temporária
-  const tempPassword = `RentPay@${Math.floor(1000 + Math.random() * 9000)}`
+  const tempPassword = `Alugho@${Math.floor(1000 + Math.random() * 9000)}`
 
   // 2. Criar usuário no Supabase Auth usando Admin API
   let authUserId = null;
@@ -83,12 +83,12 @@ export async function createTenant(formData: FormData) {
   if (process.env.RESEND_API_KEY) {
     try {
       await resend.emails.send({
-        from: 'RentPay <onboarding@resend.dev>',
+        from: 'Alugho <onboarding@resend.dev>',
         to: email,
-        subject: 'Bem-vindo ao Portal do Inquilino - RentPay',
+        subject: 'Bem-vindo ao Portal do Inquilino - Alugho',
         html: `
           <h2>Olá, ${nome}!</h2>
-          <p>Seu locador acabou de te adicionar ao imóvel <strong>${property.endereco}</strong> através do <strong>RentPay</strong>.</p>
+          <p>Seu locador acabou de te adicionar ao imóvel <strong>${property.endereco}</strong> através do <strong>Alugho</strong>.</p>
           <p>No seu Portal do Inquilino você poderá acompanhar suas faturas, ver seu Score de Pontualidade e abrir chamados de manutenção.</p>
           <br/>
           <div style="background: #f3f4f6; padding: 16px; border-radius: 8px;">

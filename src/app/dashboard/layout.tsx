@@ -29,9 +29,9 @@ export default async function DashboardLayout({
           <div className="flex items-center gap-8">
             <Link href="/dashboard" className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer">
               <div className="w-8 h-8 bg-teal-600 rounded flex items-center justify-center text-white font-bold text-lg shadow-sm">
-                R
+                A
               </div>
-              <span className="text-xl font-medium text-gray-900 dark:text-white hidden sm:block">RentPay</span>
+              <span className="text-xl font-medium text-gray-900 dark:text-white hidden sm:block">Alugho</span>
             </Link>
             
             <nav className="flex gap-6">

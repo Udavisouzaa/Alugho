@@ -85,7 +85,7 @@ export async function createMaintenanceRequest(formData: FormData) {
 
     if (process.env.RESEND_API_KEY && landlordEmail) {
       await resend.emails.send({
-        from: 'RentPay <onboarding@resend.dev>',
+        from: 'Alugho <onboarding@resend.dev>',
         to: landlordEmail,
         subject: `Novo Chamado de Manutenção de ${tenant.nome}`,
         html: `

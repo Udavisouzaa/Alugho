@@ -60,7 +60,7 @@ export async function GET(request: Request) {
         if (diffDays === 3) {
           // Vence em 3 dias
           shouldSend = true
-          subject = 'Sua fatura do RentPay vence em 3 dias'
+          subject = 'Sua fatura do Alugho vence em 3 dias'
           emailBody = `
             <h3>Olá, ${tenant.nome}</h3>
             <p>Lembrete amigável: sua fatura de aluguel (${invoice.mes_referencia}) no valor de <strong>R$ ${invoice.valor}</strong> vence no dia <strong>${dueDate.toLocaleDateString('pt-BR')}</strong>.</p>
@@ -70,7 +70,7 @@ export async function GET(request: Request) {
         } else if (diffDays === 0) {
           // Vence Hoje
           shouldSend = true
-          subject = 'Atenção: Sua fatura do RentPay vence HOJE'
+          subject = 'Atenção: Sua fatura do Alugho vence HOJE'
           emailBody = `
             <h3>Olá, ${tenant.nome}</h3>
             <p>Sua fatura de aluguel (${invoice.mes_referencia}) no valor de <strong>R$ ${invoice.valor}</strong> vence <strong>HOJE</strong>!</p>
@@ -82,7 +82,7 @@ export async function GET(request: Request) {
         // Enviar alerta apenas no primeiro dia de atraso para não causar muito spam diário
         if (diffDays === -1) {
           shouldSend = true
-          subject = 'URGENTE: Sua fatura do RentPay está atrasada'
+          subject = 'URGENTE: Sua fatura do Alugho está atrasada'
           emailBody = `
             <h3 style="color: #d97706;">Olá, ${tenant.nome}</h3>
             <p>Não identificamos o pagamento da sua fatura (${invoice.mes_referencia}) que venceu ontem.</p>
@@ -96,7 +96,7 @@ export async function GET(request: Request) {
       if (shouldSend && process.env.RESEND_API_KEY) {
         try {
           await resend.emails.send({
-            from: 'RentPay <onboarding@resend.dev>',
+            from: 'Alugho <onboarding@resend.dev>',
             to: tenant.email,
             subject: subject,
             html: emailBody

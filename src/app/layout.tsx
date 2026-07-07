@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "RentPay — Gestão de Aluguel Simplificada",
+  title: "Alugho — Gestão de Aluguel Simplificada",
   description: "Plataforma completa para locadores e inquilinos: cobrança automática de aluguel, portal do inquilino, gestão de chamados de manutenção e score de pontualidade.",
 };
 

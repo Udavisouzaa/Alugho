@@ -41,7 +41,7 @@ export default function LoginPage({
       >
         <div className="flex flex-col mb-8 text-center">
           <h1 className="text-3xl font-medium text-teal-600 dark:text-teal-400">
-            RentPay
+            Alugho
           </h1>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
             Acesse sua conta para gerenciar seus imóveis.

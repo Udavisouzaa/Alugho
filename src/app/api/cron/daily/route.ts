@@ -107,7 +107,7 @@ export async function GET(request: Request) {
         try {
           if (process.env.STRIPE_SECRET_KEY) {
             const payment = await createPayment(
-              activeTenant.email || 'contato@rentpay.com', 
+              activeTenant.email || 'contato@alugho.com', 
               property.valor_aluguel, 
               `Aluguel - ${property.endereco} (${mesReferencia})`,
               newInvoice.id
@@ -131,7 +131,7 @@ export async function GET(request: Request) {
         // c) Enviar E-mail via Resend (Simulação)
         if (process.env.RESEND_API_KEY && activeTenant.email) {
           await resend.emails.send({
-            from: 'RentPay <onboarding@resend.dev>', // Domínio de teste do Resend
+            from: 'Alugho <onboarding@resend.dev>', // Domínio de teste do Resend
             to: activeTenant.email,
             subject: `Sua fatura de aluguel (${mesReferencia}) está disponível`,
             html: `
