@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { login } from './actions'
 import { ThemeToggle } from '@/components/ThemeToggle'
-import { QuickLoginLocador } from '@/components/QuickLoginLocador'
+
 
 export default function LoginPage({
   searchParams,
@@ -79,7 +79,6 @@ export default function LoginPage({
           </p>
         )}
 
-        <QuickLoginLocador />
 
         <div className="mt-8 text-center flex flex-col gap-3">
           <div className="text-sm text-gray-500 dark:text-gray-400">

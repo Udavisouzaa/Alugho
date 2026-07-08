@@ -121,26 +121,7 @@ export default function TenantLoginPage() {
                 </button>
               </div>
 
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <p className="text-xs text-gray-500 text-center mb-3 font-medium uppercase tracking-wider">Acesso Rápido de Teste</p>
-                <div className="grid grid-cols-2 gap-2">
-                  <button 
-                    type="button"
-                    onClick={() => quickLogin('inquilino1@rentpay.com', 'Senha454*')}
-                    className="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs py-2 rounded transition-colors"
-                  >
-                    Inquilino 1
-                  </button>
-                  <button 
-                    type="button"
-                    onClick={() => quickLogin('inquilino2@rentpay.com', 'inquilino2')}
-                    className="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs py-2 rounded transition-colors"
-                  >
-                    Inquilino 2
-                  </button>
-                </div>
-              </div>
-              
+
               <div className="text-center mt-4">
                 <Link href="/login" className="text-sm text-gray-400 hover:text-gray-600 underline">
                   Voltar para Área do Locador
