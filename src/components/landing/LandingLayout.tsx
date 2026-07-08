@@ -20,8 +20,12 @@ export function LandingLayout({ children }: { children: React.ReactNode }) {
               <a href="#como-funciona" className="text-sm font-medium text-slate-600 hover:text-emerald-600 transition-colors">Como funciona</a>
               <a href="#comparativo" className="text-sm font-medium text-slate-600 hover:text-emerald-600 transition-colors">Comparativo</a>
               <a href="#planos" className="text-sm font-medium text-slate-600 hover:text-emerald-600 transition-colors">Planos</a>
+              <div className="w-px h-6 bg-slate-200 mx-2"></div>
+              <a href="/login" className="text-sm font-bold text-slate-700 hover:text-emerald-600 transition-colors">
+                Entrar
+              </a>
               <a href="#teste-agora" className="px-4 py-2 bg-emerald-600 text-white text-sm font-bold rounded-full shadow-lg shadow-emerald-600/20 hover:bg-emerald-700 transition-colors">
-                Quero testar o Alugho
+                Criar Conta
               </a>
             </nav>
 
@@ -37,13 +41,18 @@ export function LandingLayout({ children }: { children: React.ReactNode }) {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden bg-white border-b border-slate-200 px-4 py-4 space-y-4">
+          <div className="md:hidden bg-white border-b border-slate-200 px-4 py-4 space-y-4 shadow-sm">
             <a href="#como-funciona" onClick={() => setIsMenuOpen(false)} className="block text-sm font-medium text-slate-600">Como funciona</a>
             <a href="#comparativo" onClick={() => setIsMenuOpen(false)} className="block text-sm font-medium text-slate-600">Comparativo</a>
             <a href="#planos" onClick={() => setIsMenuOpen(false)} className="block text-sm font-medium text-slate-600">Planos</a>
-            <a href="#teste-agora" onClick={() => setIsMenuOpen(false)} className="block px-4 py-2 bg-emerald-600 text-white text-center text-sm font-bold rounded-full shadow-lg shadow-emerald-600/20">
-              Quero testar o Alugho
-            </a>
+            <div className="border-t border-slate-100 pt-4 pb-2">
+              <a href="/login" onClick={() => setIsMenuOpen(false)} className="block text-center text-sm font-bold text-slate-700 mb-4 hover:text-emerald-600">
+                Entrar na minha conta
+              </a>
+              <a href="#teste-agora" onClick={() => setIsMenuOpen(false)} className="block px-4 py-3 bg-emerald-600 text-white text-center text-sm font-bold rounded-xl shadow-md shadow-emerald-600/20">
+                Criar Conta Grátis
+              </a>
+            </div>
           </div>
         )}
       </header>
