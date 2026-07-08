@@ -24,7 +24,7 @@ export function LandingLayout({ children }: { children: React.ReactNode }) {
               <a href="/login" className="text-sm font-bold text-slate-700 hover:text-emerald-600 transition-colors">
                 Entrar
               </a>
-              <a href="#teste-agora" className="px-4 py-2 bg-emerald-600 text-white text-sm font-bold rounded-full shadow-lg shadow-emerald-600/20 hover:bg-emerald-700 transition-colors">
+              <a href="/signup" className="px-4 py-2 bg-emerald-600 text-white text-sm font-bold rounded-full shadow-lg shadow-emerald-600/20 hover:bg-emerald-700 transition-colors">
                 Criar Conta
               </a>
             </nav>
@@ -49,7 +49,7 @@ export function LandingLayout({ children }: { children: React.ReactNode }) {
               <a href="/login" onClick={() => setIsMenuOpen(false)} className="block text-center text-sm font-bold text-slate-700 mb-4 hover:text-emerald-600">
                 Entrar na minha conta
               </a>
-              <a href="#teste-agora" onClick={() => setIsMenuOpen(false)} className="block px-4 py-3 bg-emerald-600 text-white text-center text-sm font-bold rounded-xl shadow-md shadow-emerald-600/20">
+              <a href="/signup" onClick={() => setIsMenuOpen(false)} className="block px-4 py-3 bg-emerald-600 text-white text-center text-sm font-bold rounded-xl shadow-md shadow-emerald-600/20">
                 Criar Conta Grátis
               </a>
             </div>
