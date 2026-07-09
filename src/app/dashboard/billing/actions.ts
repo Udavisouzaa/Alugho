@@ -28,17 +28,45 @@ export async function createSubscriptionCheckout() {
 
   let customerId = subData?.stripe_customer_id
 
-  // MVP Mock: Sem chaves reais do Stripe, ativamos direto no banco para demonstração
-  const nextMonth = new Date()
-  nextMonth.setDate(nextMonth.getDate() + 30)
+  if (!customerId) {
+    // Se não tiver, cria um Customer no Stripe
+    const customer = await stripe.customers.create({
+      email: user.email,
+      metadata: {
+        supabase_user_id: user.id
+      }
+    })
+    customerId = customer.id
 
-  await supabase.from('subscriptions').upsert({
-    user_id: user.id,
-    stripe_customer_id: 'cus_mock123',
-    status: 'active',
-    current_period_end: nextMonth.toISOString()
+    // Pode inserir provisoriamente na tabela
+    await supabase.from('subscriptions').upsert({
+      user_id: user.id,
+      stripe_customer_id: customerId,
+      status: 'none'
+    })
+  }
+
+  // Cria a Sessão de Checkout (Modo Assinatura)
+  const session = await stripe.checkout.sessions.create({
+    customer: customerId,
+    mode: 'subscription',
+    payment_method_types: ['card'],
+    line_items: [
+      {
+        price: STRIPE_PRO_PRICE_ID,
+        quantity: 1,
+      },
+    ],
+    // Trial de 14 dias aprovado para o soft launch
+    subscription_data: {
+      trial_period_days: 14,
+      metadata: {
+        supabase_user_id: user.id
+      }
+    },
+    success_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/dashboard/billing?success=true`,
+    cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/dashboard/billing?canceled=true`,
   })
 
-  // Simula o redirecionamento de sucesso do Stripe
-  return { url: '/dashboard/billing?success=true' }
+  return { url: session.url }
 }
