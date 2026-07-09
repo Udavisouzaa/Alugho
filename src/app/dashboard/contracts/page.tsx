@@ -52,8 +52,78 @@ export default async function ContractsPage() {
         </Link>
       </div>
 
-      {/* Tabela de Contratos */}
-      <div className="bg-white dark:bg-gray-800 rounded-3xl border border-slate-200 dark:border-gray-700 overflow-hidden shadow-sm">
+      {/* Renderização para Mobile (Cards) */}
+      <div className="block md:hidden space-y-4">
+        {contracts.length === 0 ? (
+          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-slate-200 dark:border-gray-700 p-8 text-center">
+            <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-slate-50 dark:bg-gray-700 mb-4">
+              <FileText className="w-6 h-6 text-slate-400" />
+            </div>
+            <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">Nenhum contrato ativo</h3>
+            <p className="text-slate-500 dark:text-gray-400 text-xs mb-6">
+              Comece a organizar os prazos e reajustes vinculando um inquilino.
+            </p>
+            <Link
+              href="/dashboard/contracts/new"
+              className="inline-flex items-center justify-center gap-2 w-full py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-semibold rounded-xl text-sm hover:bg-slate-800 transition-all"
+            >
+              <Plus className="w-4 h-4" />
+              Cadastrar primeiro
+            </Link>
+          </div>
+        ) : (
+          contracts.map((contract) => (
+            <div key={contract.id} className="bg-white dark:bg-gray-800 rounded-2xl border border-slate-200 dark:border-gray-700 p-4 shadow-sm flex flex-col gap-3">
+              <div className="flex justify-between items-start">
+                <div className="flex flex-col gap-1 pr-2">
+                  <div className="flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-white">
+                    <Home className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                    <span className="line-clamp-1">{contract.properties?.endereco}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs font-medium text-slate-500 dark:text-gray-400">
+                    <User className="w-3.5 h-3.5 shrink-0" />
+                    <span className="line-clamp-1">{contract.tenants?.nome}</span>
+                  </div>
+                </div>
+                <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider shrink-0 ${
+                  contract.status === 'ativo' 
+                    ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400' 
+                    : 'bg-slate-100 text-slate-600 dark:bg-gray-700 dark:text-gray-400'
+                }`}>
+                  {contract.status === 'ativo' ? 'Ativo' : 'Fim'}
+                </span>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-2 p-3 bg-slate-50 dark:bg-gray-900/50 rounded-xl">
+                <div>
+                  <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Valor do Aluguel</div>
+                  <div className="text-sm font-black text-slate-900 dark:text-white">
+                    R$ {Number(contract.rent_amount).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Vencimento</div>
+                  <div className="text-sm font-bold text-slate-700 dark:text-gray-300">
+                    Dia {contract.due_day}
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex justify-between items-center mt-1">
+                <div className="text-xs text-slate-500 dark:text-gray-400">
+                  <span className="font-semibold text-slate-700 dark:text-gray-300">Índice:</span> {contract.readjustment_index}
+                </div>
+                <button className="text-sm font-bold text-emerald-600 hover:text-emerald-700 dark:text-emerald-400">
+                  Detalhes
+                </button>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* Renderização para Desktop (Tabela) */}
+      <div className="hidden md:block bg-white dark:bg-gray-800 rounded-3xl border border-slate-200 dark:border-gray-700 overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse min-w-[800px]">
             <thead>
