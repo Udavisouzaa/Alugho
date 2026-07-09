@@ -18,11 +18,17 @@ export default async function NewContractPage() {
     .select('id, endereco')
     .eq('user_id', user.id)
 
-  // Buscar inquilinos do usuário
-  const { data: tenants } = await supabase
-    .from('tenants')
-    .select('id, nome')
-    .eq('user_id', user.id)
+  const propertyIds = properties?.map(p => p.id) || []
+
+  // Buscar inquilinos do usuário baseando-se nas propriedades
+  let tenants: any[] = []
+  if (propertyIds.length > 0) {
+    const { data: t } = await supabase
+      .from('tenants')
+      .select('id, nome')
+      .in('property_id', propertyIds)
+    tenants = t || []
+  }
 
   return (
     <div className="max-w-3xl mx-auto space-y-8">
