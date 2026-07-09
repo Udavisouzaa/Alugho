@@ -1,19 +1,18 @@
-import { createClient } from '@/utils/supabase/server'
+import { createAdminClient } from '@/utils/supabase/admin'
 import { redirect } from 'next/navigation'
 import { Users, Search, MoreVertical } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
 export default async function AdminUsersPage() {
-  const supabase = await createClient()
+  const adminDb = createAdminClient()
   
-  // No MVP, pegamos todos os proprietários da tabela 'properties' usando group by ou join
-  // Mas como a Auth users não expõe email no select normal, para o admin painel funcionar 100%
-  // Precisaria usar a supabase_admin key. Vamos mockar a lista de usuários baseada nos 
-  // locadores reais caso a policy permita, ou mostrar um mock.
+  // Buscar os usuários reais do Auth (só funciona com a Service Role Key)
+  const { data: authData } = await adminDb.auth.admin.listUsers()
+  const users = authData?.users || []
   
-  // Vamos tentar buscar as propriedades para deduzir usuários ativos
-  const { data: properties } = await supabase
+  // Buscar todas as propriedades para contar quantos imóveis cada usuário tem
+  const { data: properties } = await adminDb
     .from('properties')
     .select('owner_id')
     
@@ -24,8 +23,6 @@ export default async function AdminUsersPage() {
       ownerCounts[p.owner_id] = (ownerCounts[p.owner_id] || 0) + 1
     })
   }
-  
-  const activeOwnersCount = Object.keys(ownerCounts).length
 
   return (
     <div className="max-w-6xl mx-auto space-y-8">
@@ -49,13 +46,13 @@ export default async function AdminUsersPage() {
 
       <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
         <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-          <h3 className="font-bold text-slate-700">Todos os Locadores ({activeOwnersCount} detectados)</h3>
+          <h3 className="font-bold text-slate-700">Todos os Locadores ({users.length} detectados)</h3>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-slate-100 bg-slate-50/50">
-                <th className="p-4 px-6 text-xs font-bold text-slate-500 uppercase tracking-wider">Locador</th>
+                <th className="p-4 px-6 text-xs font-bold text-slate-500 uppercase tracking-wider">Locador (E-mail)</th>
                 <th className="p-4 px-6 text-xs font-bold text-slate-500 uppercase tracking-wider text-center">Imóveis</th>
                 <th className="p-4 px-6 text-xs font-bold text-slate-500 uppercase tracking-wider">Plano</th>
                 <th className="p-4 px-6 text-xs font-bold text-slate-500 uppercase tracking-wider">Contato (WhatsApp)</th>
@@ -64,22 +61,26 @@ export default async function AdminUsersPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {Object.keys(ownerCounts).map((ownerId, index) => (
-                <tr key={ownerId} className="hover:bg-slate-50 transition-colors">
+              {users.map((user) => {
+                // Tenta pegar o whatsapp do user_metadata se estiver salvo no signup
+                const whatsapp = user.user_metadata?.whatsapp || '5548992084726'
+                
+                return (
+                <tr key={user.id} className="hover:bg-slate-50 transition-colors">
                   <td className="p-4 px-6">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center font-bold text-sm">
-                        {ownerId.substring(0, 2).toUpperCase()}
+                      <div className="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center font-bold text-sm shrink-0">
+                        {user.email?.substring(0, 2).toUpperCase()}
                       </div>
-                      <div>
-                        <div className="text-sm font-bold text-slate-900">Locador {ownerId.substring(0, 6)}...</div>
-                        <div className="text-xs text-slate-500">ID: {ownerId}</div>
+                      <div className="min-w-0">
+                        <div className="text-sm font-bold text-slate-900 truncate">{user.email}</div>
+                        <div className="text-xs text-slate-500 truncate">Membro desde: {new Date(user.created_at).toLocaleDateString('pt-BR')}</div>
                       </div>
                     </div>
                   </td>
                   <td className="p-4 px-6 text-center">
                     <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 text-slate-700 font-bold text-sm">
-                      {ownerCounts[ownerId]}
+                      {ownerCounts[user.id] || 0}
                     </span>
                   </td>
                   <td className="p-4 px-6">
@@ -89,7 +90,7 @@ export default async function AdminUsersPage() {
                   </td>
                   <td className="p-4 px-6">
                     <a 
-                      href={`https://wa.me/5548992084726?text=Ol%C3%A1%2C%20boas-vindas%20%C3%A0%20Alugho!`} 
+                      href={`https://wa.me/${whatsapp.replace(/\D/g, '')}?text=Ol%C3%A1%2C%20boas-vindas%20%C3%A0%20Alugho!`} 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-50 text-emerald-700 hover:bg-emerald-600 hover:text-white rounded-lg text-xs font-bold transition-colors border border-emerald-200 hover:border-emerald-600"
@@ -110,11 +111,11 @@ export default async function AdminUsersPage() {
                     </button>
                   </td>
                 </tr>
-              ))}
+              )})}
               
-              {Object.keys(ownerCounts).length === 0 && (
+              {users.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="p-12 text-center text-slate-500">
+                  <td colSpan={6} className="p-12 text-center text-slate-500">
                     Nenhum locador encontrado.
                   </td>
                 </tr>

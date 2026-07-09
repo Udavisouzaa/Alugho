@@ -1,15 +1,36 @@
 import { Users, Home, CreditCard, TrendingUp, AlertCircle } from 'lucide-react'
+import { createAdminClient } from '@/utils/supabase/admin'
 
 export const dynamic = 'force-dynamic'
 
 export default async function AdminDashboardPage() {
-  // Em produção, isso viria de consultas complexas no Supabase (COUNT(*), sum(rent_amount))
-  // Para o MVP visual solicitado pelo Veridiano, estruturamos os cards principais
+  const adminDb = createAdminClient()
+
+  // Buscar Total de Locadores (Usuários Autenticados)
+  const { data: authData } = await adminDb.auth.admin.listUsers()
+  const totalProprietarios = authData?.users?.length || 0
+
+  // Buscar Total de Imóveis Ativos na Plataforma
+  const { count: imoveisAtivos } = await adminDb
+    .from('properties')
+    .select('*', { count: 'exact', head: true })
+
+  // Buscar Receita Recorrente (MRR) baseada nos Contratos Ativos
+  const { data: contractsData } = await adminDb
+    .from('contracts')
+    .select('rent_amount')
+    .eq('status', 'ativo')
+
+  const mrr = contractsData?.reduce((acc, curr) => acc + Number(curr.rent_amount), 0) || 0
+
+  // Inadimplência mockada por enquanto até termos o módulo de cobranças processando webhooks reais de atraso
+  const inadimplencia = 0.0
+
   const metrics = {
-    totalProprietarios: 142,
-    imoveisAtivos: 358,
-    mrr: 6850.00, // Monthly Recurring Revenue
-    inadimplencia: 4.2
+    totalProprietarios,
+    imoveisAtivos: imoveisAtivos || 0,
+    mrr,
+    inadimplencia
   }
 
   return (
