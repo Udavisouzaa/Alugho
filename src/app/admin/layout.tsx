@@ -8,7 +8,8 @@ export const dynamic = 'force-dynamic'
 // Defina aqui os emails que têm acesso de superadmin (MVP)
 const ADMIN_EMAILS = [
   'admin@alugho.com',
-  // Substitua ou adicione os e-mails reais do Veridiano e seu
+  'davisouza.ofc2@gmail.com',
+  'veridianofer@gmail.com'
 ]
 
 export default async function AdminLayout({
