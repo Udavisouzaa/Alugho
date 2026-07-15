@@ -36,7 +36,7 @@ export function PropertiesList({ properties }: { properties: Property[] }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1, duration: 0.5 }}
-            className="bg-white dark:bg-gray-800 rounded-[2rem] overflow-hidden border border-slate-200 dark:border-gray-700 shadow-sm group hover:shadow-xl hover:shadow-emerald-900/5 dark:hover:shadow-emerald-900/20 transition-all cursor-pointer flex flex-col relative"
+            className="bg-white dark:bg-gray-800 rounded-[1.75rem] overflow-hidden border border-slate-200/80 dark:border-gray-700 shadow-[var(--shadow-sm)] group hover:shadow-[var(--shadow-lg)] transition-all cursor-pointer flex flex-col relative"
           >
             <Link href={`/dashboard/properties/${property.id}`} className="absolute inset-0 z-10" aria-label={`Ver detalhes de ${property.address}`} />
             

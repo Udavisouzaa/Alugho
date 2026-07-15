@@ -3,6 +3,8 @@
 import { motion } from 'motion/react'
 import { DollarSign } from 'lucide-react'
 import Link from 'next/link'
+import { StatCard } from '@/components/ui/StatCard'
+import { Badge } from '@/components/ui/Badge'
 
 interface Stat {
   title: string
@@ -42,20 +44,7 @@ export function DashboardOverview({ stats, invoices }: DashboardOverviewProps) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, i) => (
-          <motion.div
-            key={stat.title}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1, duration: 0.5 }}
-            className="bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-sm border border-slate-200 dark:border-gray-700 flex flex-col gap-1 transition-colors"
-          >
-            <span className="text-slate-400 dark:text-gray-400 text-[10px] font-black uppercase tracking-widest">{stat.title}</span>
-            <div className="flex items-baseline gap-2 mt-1">
-              <span className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">{stat.value}</span>
-              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${stat.isPositive ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400' : 'bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400'}`}>
-                {stat.trend}
-              </span>
-            </div>
+          <StatCard key={stat.title} title={stat.title} value={stat.value} trend={stat.trend} isPositive={stat.isPositive} delay={i * 0.1}>
             {i === 0 && (
               <div className="w-full h-1.5 bg-slate-100 dark:bg-gray-700 rounded-full mt-4 overflow-hidden">
                 <div className="w-[85%] h-full bg-emerald-600 rounded-full"></div>
@@ -74,7 +63,7 @@ export function DashboardOverview({ stats, invoices }: DashboardOverviewProps) {
                  <div className="w-[8%] h-full bg-rose-500 rounded-full"></div>
                </div>
             )}
-          </motion.div>
+          </StatCard>
         ))}
       </div>
 
@@ -92,7 +81,7 @@ export function DashboardOverview({ stats, invoices }: DashboardOverviewProps) {
             </h2>
             <Link href="/dashboard/invoices" className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline transition-all cursor-pointer uppercase tracking-wider">Ver todos</Link>
           </div>
-          <div className="flex-1 bg-white dark:bg-gray-800 rounded-[2rem] border border-slate-200 dark:border-gray-700 overflow-hidden flex flex-col shadow-sm transition-colors">
+          <div className="flex-1 bg-white dark:bg-gray-800 rounded-[1.75rem] border border-slate-200/80 dark:border-gray-700 overflow-hidden flex flex-col shadow-[var(--shadow-sm)] transition-colors">
             <div className="overflow-x-auto flex-1">
               <table className="w-full text-left">
                 <thead className="bg-slate-50/50 dark:bg-gray-800/50 border-b border-slate-100 dark:border-gray-700">
@@ -122,11 +111,9 @@ export function DashboardOverview({ stats, invoices }: DashboardOverviewProps) {
                       <td className="px-6 py-4 text-sm font-medium text-slate-500 dark:text-gray-400">{invoice.dueDate}</td>
                       <td className="px-6 py-4 text-sm font-black text-slate-900 dark:text-white">R$ {invoice.amount.toLocaleString('pt-BR')}</td>
                       <td className="px-6 py-4 text-right">
-                        <span className={`inline-block px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
-                          invoice.status === 'Late' ? 'bg-rose-50 text-rose-600 dark:bg-rose-900/30 dark:text-rose-400' : 'bg-amber-50 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400'
-                        }`}>
+                        <Badge tone={invoice.status === 'Late' ? 'rose' : 'amber'}>
                           {invoice.status === 'Late' ? 'Atrasado' : 'Pendente'}
-                        </span>
+                        </Badge>
                       </td>
                     </tr>
                   ))}
@@ -146,7 +133,7 @@ export function DashboardOverview({ stats, invoices }: DashboardOverviewProps) {
             <h2 className="font-bold text-slate-900 dark:text-white">Receita Anual</h2>
             <DollarSign className="w-4 h-4 text-slate-300 dark:text-gray-600" />
           </div>
-          <div className="bg-white dark:bg-gray-800 rounded-[2rem] p-6 border border-slate-200 dark:border-gray-700 flex-1 flex flex-col shadow-sm transition-colors">
+          <div className="bg-white dark:bg-gray-800 rounded-[1.75rem] p-6 border border-slate-200/80 dark:border-gray-700 flex-1 flex flex-col shadow-[var(--shadow-sm)] transition-colors">
              <div className="flex-1 w-full flex items-end justify-between gap-2 pb-4">
                {[40, 60, 45, 80, 55, 90, 75, 100, 85, 95, 70, 110].map((h, i) => (
                  <motion.div 

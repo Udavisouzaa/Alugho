@@ -31,7 +31,7 @@ export function Sidebar() {
 
   return (
     <>
-      <aside className="w-64 bg-white dark:bg-gray-800 border-r border-slate-200 dark:border-gray-700 flex-col z-20 shrink-0 hidden md:flex h-full">
+      <aside className="w-64 bg-white dark:bg-gray-800 border-r border-slate-200/80 dark:border-gray-700 flex-col z-20 shrink-0 hidden md:flex h-full shadow-[var(--shadow-xs)]">
         <div className="p-8">
           <div className="flex items-center justify-center py-6">
           <img src="/logo.png" alt="Alugho" className="h-12 w-auto object-contain rounded-xl" />

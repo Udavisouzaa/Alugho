@@ -2,6 +2,7 @@
 
 import { motion } from 'motion/react'
 import { Search, Filter, MoreHorizontal } from 'lucide-react'
+import { Badge } from '@/components/ui/Badge'
 
 interface Tenant {
   id: string
@@ -22,7 +23,7 @@ export function TenantsList({ tenants }: { tenants: Tenant[] }) {
         </div>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-[2rem] shadow-sm border border-slate-200 dark:border-gray-700 overflow-hidden flex flex-col flex-1 min-h-0 transition-colors">
+      <div className="bg-white dark:bg-gray-800 rounded-[1.75rem] shadow-[var(--shadow-sm)] border border-slate-200/80 dark:border-gray-700 overflow-hidden flex flex-col flex-1 min-h-0 transition-colors">
         <div className="p-6 border-b border-slate-100 dark:border-gray-700 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center bg-slate-50 dark:bg-gray-900 rounded-2xl px-4 py-2.5 w-full sm:w-80 border border-slate-200/60 dark:border-gray-700">
             <Search className="w-4 h-4 text-slate-400 shrink-0" />
@@ -73,11 +74,9 @@ export function TenantsList({ tenants }: { tenants: Tenant[] }) {
                   </td>
                   <td className="py-4 px-6 text-sm font-medium text-slate-500 dark:text-gray-400">{tenant.propertyAddress}</td>
                   <td className="py-4 px-6">
-                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
-                      tenant.paymentStatus === 'On Time' ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400' : 'bg-rose-50 text-rose-600 dark:bg-rose-900/30 dark:text-rose-400'
-                    }`}>
+                    <Badge tone={tenant.paymentStatus === 'On Time' ? 'emerald' : 'rose'}>
                       {tenant.paymentStatus === 'On Time' ? 'Em dia' : 'Atrasado'}
-                    </span>
+                    </Badge>
                   </td>
                   <td className="py-4 px-6">
                     <div className="flex items-center space-x-3">

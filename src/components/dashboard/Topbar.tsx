@@ -6,7 +6,7 @@ import { UserDropdown } from '@/components/UserDropdown'
 
 export function Topbar({ name, initials }: { name: string, initials: string }) {
   return (
-    <header className="h-16 md:h-20 bg-white dark:bg-gray-800 border-b border-slate-200 dark:border-gray-700 px-4 md:px-10 flex items-center justify-between sticky top-0 z-10 shrink-0 transition-colors">
+    <header className="h-16 md:h-20 bg-white/90 dark:bg-gray-800/90 backdrop-blur-md border-b border-slate-200/80 dark:border-gray-700 px-4 md:px-10 flex items-center justify-between sticky top-0 z-10 shrink-0 transition-colors">
       <div className="flex items-center gap-4 flex-1">
         <div className="flex items-center md:hidden">
           <img src="/logo.png" alt="Alugho" className="h-8 w-auto object-contain rounded-lg" />

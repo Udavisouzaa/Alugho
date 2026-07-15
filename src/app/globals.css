@@ -1,8 +1,23 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f9fafb; /* gray-50 para um visual SaaS limpo */
-  --foreground: #1f2937; /* gray-800 para texto estrutural */
+  --background: #f8faf9; /* leve tom esverdeado para um visual SaaS premium */
+  --foreground: #0f172a; /* slate-900 para texto estrutural com mais contraste */
+
+  --color-surface: #ffffff;
+  --color-border-subtle: #e7ebe9;
+
+  /* Sombras em camadas para profundidade sutil (estilo "premium SaaS") */
+  --shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
+  --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 12px -2px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
+  --shadow-lg: 0 12px 32px -8px rgba(15, 23, 42, 0.12), 0 4px 8px -4px rgba(15, 23, 42, 0.06);
+  --shadow-glow-emerald: 0 8px 24px -4px rgba(16, 185, 129, 0.18);
+
+  --radius-sm: 0.625rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.5rem;
+  --radius-xl: 2rem;
 }
 
 @theme inline {
@@ -14,13 +29,37 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #111827;
-    --foreground: #f9fafb;
+    --background: #0b0f14;
+    --foreground: #f1f5f4;
+    --color-surface: #151b23;
+    --color-border-subtle: #232b35;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background-color: rgba(16, 185, 129, 0.2);
+}
+
+/* Scrollbar refinado para uma sensação premium */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(100, 116, 139, 0.35) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(100, 116, 139, 0.35);
+  border-radius: 999px;
 }

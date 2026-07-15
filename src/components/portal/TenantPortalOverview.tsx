@@ -73,7 +73,7 @@ export function TenantPortalOverview({ tenant, currentInvoice }: TenantPortalPro
           className="flex flex-col md:flex-row gap-8"
         >
           {/* Main Invoice Card */}
-          <div className="flex-1 bg-emerald-700 rounded-[2rem] p-8 text-white shadow-xl shadow-emerald-900/10 relative overflow-hidden flex flex-col">
+          <div className="flex-1 bg-emerald-700 rounded-[1.75rem] p-8 text-white shadow-xl shadow-emerald-900/10 relative overflow-hidden flex flex-col">
             <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/30 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
             <div className="relative z-10 flex-1 flex flex-col justify-between">
               <div>
@@ -126,7 +126,7 @@ export function TenantPortalOverview({ tenant, currentInvoice }: TenantPortalPro
               <motion.div 
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full bg-white dark:bg-gray-800 p-6 rounded-[2rem] shadow-sm border border-slate-200 dark:border-gray-700 flex items-center justify-between group cursor-pointer h-full transition-colors"
+                className="w-full bg-white dark:bg-gray-800 p-6 rounded-[1.75rem] shadow-sm border border-slate-200 dark:border-gray-700 flex items-center justify-between group cursor-pointer h-full transition-colors"
               >
                 <div className="flex items-center space-x-4">
                   <div className="w-12 h-12 bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800 text-amber-600 dark:text-amber-500 rounded-2xl flex items-center justify-center shadow-inner">
@@ -145,7 +145,7 @@ export function TenantPortalOverview({ tenant, currentInvoice }: TenantPortalPro
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => alert('Download do contrato em breve!')}
-              className="w-full bg-white dark:bg-gray-800 p-6 rounded-[2rem] shadow-sm border border-slate-200 dark:border-gray-700 flex items-center justify-between group cursor-pointer h-full transition-colors"
+              className="w-full bg-white dark:bg-gray-800 p-6 rounded-[1.75rem] shadow-sm border border-slate-200 dark:border-gray-700 flex items-center justify-between group cursor-pointer h-full transition-colors"
             >
               <div className="flex items-center space-x-4">
                 <div className="w-12 h-12 bg-slate-50 dark:bg-gray-700 border border-slate-200 dark:border-gray-600 text-slate-600 dark:text-gray-300 rounded-2xl flex items-center justify-center shadow-inner">
@@ -166,7 +166,7 @@ export function TenantPortalOverview({ tenant, currentInvoice }: TenantPortalPro
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-white dark:bg-gray-800 rounded-[2rem] p-6 md:p-8 shadow-sm border border-slate-200 dark:border-gray-700 transition-colors"
+          className="bg-white dark:bg-gray-800 rounded-[1.75rem] p-6 md:p-8 shadow-sm border border-slate-200 dark:border-gray-700 transition-colors"
         >
           <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6">Meu Imóvel</h3>
           <div className="flex flex-col md:flex-row gap-8">
